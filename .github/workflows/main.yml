@@ -1,0 +1,40 @@
+name: Ejecutar main.py
+
+on:
+  push:
+    branches:
+      - main  # Cambia esto por el nombre de tu rama principal si es diferente
+  pull_request:
+    branches:
+      - main  # Cambia esto por el nombre de tu rama principal si es diferente
+  schedule:
+    - cron: '0 */2 * * *'  # Ejecutar cada 2 horas
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v2
+
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Cambia esto si tu proyecto requiere una versión específica de Python
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Cambia esto si utilizas un archivo de requisitos diferente
+
+    - name: Ejecutar main.py
+      run: python main.py
+
+  manual-trigger:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+    - name: Ejecutar manualmente
+      run: echo "Este flujo de trabajo ha sido ejecutado manualmente"
